@@ -1,20 +1,35 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react'
+import { motion } from 'framer-motion'
 import { useLocation } from 'react-router-dom';
-import { Users, FileText, Settings, LogOut, Plus, Activity, Calendar, CheckSquare } from 'lucide-react';
+import { Users, FileText, Settings, LogOut, Plus, Activity, Calendar, CheckSquare } from 'lucide-react'
+import Patients from './patients'
 
 export default function StaffDashboard() {
+  const [totalPatients, setTotalPatients] = useState(120)
+  const [appointmentsToday] = useState(34)
+  const [pendingTasks] = useState(8)
   const location = useLocation();
   const staffName = new URLSearchParams(location.search).get('staffName') || "Staff Member";
-
-  const [totalPatients] = useState(120);
-  const [appointmentsToday] = useState(34);
-  const [pendingTasks] = useState(8);
-  const [showPatientRegistration, setShowPatientRegistration] = useState(false);
+  const [showPatientRegistration, setShowPatientRegistration] = useState(false)
+  const [showPatientList, setShowPatientList] = useState(false)
+  const [patients, setPatients] = useState([
+    { id: 1, name: "John Doe", age: 35, gender: "Male", contact: "123-456-7890", address: "123 Main St", department: "Cardiology", consultation: true, admitted: false },
+    { id: 2, name: "Jane Smith", age: 28, gender: "Female", contact: "987-654-3210", address: "456 Elm St", department: "Neurology", consultation: false, admitted: true },
+  ])
 
   const handlePatientRegistration = () => {
-    setShowPatientRegistration(!showPatientRegistration);
-  };
+    setShowPatientRegistration(!showPatientRegistration)
+    setShowPatientList(false)
+  }
+
+  const handleShowPatients = () => {
+    setShowPatientList(true)
+    setShowPatientRegistration(false)
+  }
+
+  const handleUpdatePatient = (updatedPatient) => {
+    setPatients(patients.map(p => p.id === updatedPatient.id ? updatedPatient : p))
+  }
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -28,21 +43,20 @@ export default function StaffDashboard() {
         </div>
         <nav className="mt-6">
           {[
-            { icon: Users, text: "Users" },
+            { icon: Users, text: "Patients", onClick: handleShowPatients },
             { icon: FileText, text: "Reports" },
             { icon: Settings, text: "Settings" },
             { icon: Plus, text: "Add Patient", onClick: handlePatientRegistration },
             { icon: LogOut, text: "Log out" },
           ].map((item, index) => (
-            <a
+            <button
               key={index}
-              href='#'
-              className="flex items-center px-6 py-3 text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition-colors duration-200"
+              className="w-full flex items-center px-6 py-3 text-gray-700 hover:bg-blue-100 hover:text-blue-600"
               onClick={item.onClick}
             >
               <item.icon className="h-5 w-5 mr-3" />
               {item.text}
-            </a>
+            </button>
           ))}
         </nav>
       </motion.aside>
@@ -84,28 +98,34 @@ export default function StaffDashboard() {
             ))}
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mt-8 bg-white rounded-lg shadow-md"
-          >
-            <div className="flex items-center justify-between px-6 py-4 border-b">
-              <h2 className="text-lg font-semibold text-gray-800">Recent Activity</h2>
-              <Activity className="h-5 w-5 text-gray-500" />
-            </div>
-            <ul className="divide-y divide-gray-200">
-              {[
-                "Patient X has been discharged.",
-                "New appointment scheduled for Patient Y.",
-                "Dr. Z updated medical records for Patient A.",
-              ].map((activity, index) => (
-                <li key={index} className="px-6 py-4">
-                  <p className="text-gray-700">{activity}</p>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
+          {showPatientList && (
+            <Patients patients={patients} onUpdatePatient={handleUpdatePatient} />
+          )}
+
+          {!showPatientList && !showPatientRegistration && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="mt-8 bg-white rounded-lg shadow-md"
+            >
+              <div className="flex items-center justify-between px-6 py-4 border-b">
+                <h2 className="text-lg font-semibold text-gray-800">Recent Activity</h2>
+                <Activity className="h-5 w-5 text-gray-500" />
+              </div>
+              <ul className="divide-y divide-gray-200">
+                {[
+                  "Patient X has been discharged.",
+                  "New appointment scheduled for Patient Y.",
+                  "Dr. Z updated medical records for Patient A.",
+                ].map((activity, index) => (
+                  <li key={index} className="px-6 py-4">
+                    <p className="text-gray-700">{activity}</p>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          )}
 
           {showPatientRegistration && (
             <motion.div
@@ -141,7 +161,12 @@ export default function StaffDashboard() {
                   </div>
                   <div>
                     <label htmlFor="patientAddress" className="block text-sm font-medium text-gray-700">Address</label>
-                    <textarea id="patientAddress" rows={3} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" placeholder="Enter patient address"></textarea>
+                    <textarea
+                      id="patientAddress"
+                      rows={3}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                      placeholder="Enter patient address"
+                    ></textarea>
                   </div>
                   <div>
                     <label htmlFor="patientDepartment" className="block text-sm font-medium text-gray-700">Department</label>
@@ -162,5 +187,5 @@ export default function StaffDashboard() {
         </div>
       </main>
     </div>
-  );
+  )
 }
