@@ -1,0 +1,53 @@
+/* Landing page styling */
+.landing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #00aaff, #00ff6a);
+    color: white;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+  }
+  
+  .landing-container h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    animation: fadeInDown 1s ease-in-out;
+  }
+  
+  .button-container {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .landing-button {
+    background-color: #fff;
+    color: #00aaff;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .landing-button:hover {
+    background-color: #00aaff;
+    color: white;
+    transform: scale(1.05);
+  }
+  
+  /* Animations */
+  @keyframes fadeInDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
