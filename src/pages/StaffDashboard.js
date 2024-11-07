@@ -76,7 +76,7 @@ export default function StaffDashboard() {
             {[
               { icon: Users, title: "Total Patients", value: totalPatients },
               { icon: Calendar, title: "Appointments Today", value: appointmentsToday },
-              { icon: CheckSquare, title: "Pending Tasks", value: pendingTasks },
+              { icon: CheckSquare, title: "Pending Patients Today", value: pendingTasks },
             ].map((stat, index) => (
               <motion.div
                 key={index}
