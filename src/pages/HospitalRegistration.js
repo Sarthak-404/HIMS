@@ -48,10 +48,10 @@ export default function HospitalRegistration({ onClose }) {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl m-20"
+        className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl m-40 h-[90%]"
       >
         <h2 className="text-xl font-bold text-gray-800 mb-4">Hospital/Clinic Registration</h2>
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Hospital ID */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Hospital/Clinic ID</label>
@@ -163,7 +163,7 @@ export default function HospitalRegistration({ onClose }) {
               name="additionalInfo"
               value={formData.additionalInfo}
               onChange={handleInputChange}
-              rows="4"
+              rows="3"
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Any other information you'd like to share"
             ></textarea>
