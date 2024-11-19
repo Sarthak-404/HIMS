@@ -21,21 +21,21 @@ export default function HospitalRegistration({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await fetch('http://localhost:5000/api/register-hospital', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        alert('Registration successful!');
-        onClose(); // Close the modal
-      } else {
-        const data = await response.json();
-        alert(data.error || 'Registration failed.');
-      }
+        const response = await fetch('http://localhost:5000/api/register-hospital', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData),
+          });
+          
+          if (!response.ok) {
+            const error = await response.text();
+            throw new Error(error);
+          }
+          
+          const data = await response.json();
+          onClose()
+          alert(data.message);        
     } catch (err) {
       console.error('Registration error:', err);
       alert('An error occurred.');
@@ -48,7 +48,7 @@ export default function HospitalRegistration({ onClose }) {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl"
+        className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl m-20"
       >
         <h2 className="text-xl font-bold text-gray-800 mb-4">Hospital/Clinic Registration</h2>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -180,6 +180,7 @@ export default function HospitalRegistration({ onClose }) {
             </button>
             <button
               type="submit"
+              // onClick={onClose}
               className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
             >
               Register

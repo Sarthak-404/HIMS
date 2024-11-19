@@ -45,17 +45,33 @@ export default function Login() {
   };
 
   useEffect(() => {
-    const isRegistered = localStorage.getItem('hospitalRegistered');
-    if (isRegistered) {
-      setShowRegistration(true);
-    }
+    const checkRegistration = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/check-hospital-registration', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (response.ok) {
+          const { registered } = await response.json();
+          setShowRegistration(!registered); // Show registration form only if not registered
+        } else {
+          console.error('Failed to check registration status.');
+          setShowRegistration(true); // Default to showing the form in case of an error
+        }
+      } catch (error) {
+        console.error('Error checking registration status:', error);
+        setShowRegistration(true); // Default to showing the form in case of an error
+      }
+    };
+
+    checkRegistration();
   }, []);
 
   const handleRegistrationClose = () => {
     setShowRegistration(false);
-    localStorage.setItem('hospitalRegistered', true); // Mark as registered
+    localStorage.setItem('hospitalRegistered', true); // Mark as registered locally
   };
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-200 to-purple-200 relative">
@@ -133,7 +149,6 @@ export default function Login() {
           </button>
         </form>
       </motion.div>
-
     </div>
   );
 }
