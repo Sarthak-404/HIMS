@@ -74,7 +74,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-200 to-purple-200 relative">
+    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-blue-200 to-purple-200 relative">
       {showRegistration && <HospitalRegistration onClose={handleRegistrationClose} />}
       <motion.div
         initial={{ opacity: 0, y: -20 }}

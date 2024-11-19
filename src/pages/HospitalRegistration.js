@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Hospital, UserCircle, Lock } from 'lucide-react';
 
 export default function HospitalRegistration({ onClose }) {
   const [formData, setFormData] = useState({
@@ -43,13 +44,17 @@ export default function HospitalRegistration({ onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="absolute flex items-center justify-center z-50 mt-60 w-full bg-gradient-to-br from-blue-200 to-purple-200">
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl m-40 h-[90%]"
+        className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl mb-20"
       >
+        <div className="flex items-center justify-center mb-8">
+          <Hospital className="text-blue-600 w-12 h-12 mr-4" />
+          <h1 className="text-3xl font-bold text-gray-800">MediLogin</h1>
+        </div>
         <h2 className="text-xl font-bold text-gray-800 mb-4">Hospital/Clinic Registration</h2>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Hospital ID */}
