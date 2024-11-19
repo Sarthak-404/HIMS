@@ -1,35 +1,65 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Hospital, UserCircle, Lock } from 'lucide-react';
+import HospitalRegistration from './HospitalRegistration';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const [activeTab, setActiveTab] = useState('staff');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showRegistration, setShowRegistration] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     if (username && password) {
-      if (activeTab === 'staff') {
-        navigate(`/staff-dashboard?staffName=${encodeURIComponent(username)}`);
-      } else if (activeTab === 'admin') {
-        navigate('/admin-dashboard');
+      try {
+        const response = await fetch('http://localhost:5000/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem('token', data.token);
+
+          if (data.role === 'staff') {
+            navigate(`/staff-dashboard?staffName=${encodeURIComponent(username)}`);
+          } else if (data.role === 'admin') {
+            navigate('/admin-dashboard');
+          }
+        } else {
+          alert(data.error);
+        }
+      } catch (err) {
+        console.error('Login error:', err);
+        alert('An error occurred during login.');
       }
     } else {
       alert('Please fill in all fields.');
     }
   };
 
-  const tabVariants = {
-    active: { backgroundColor: '#3B82F6', color: 'white' },
-    inactive: { backgroundColor: '#E5E7EB', color: '#4B5563' }
+  useEffect(() => {
+    const isRegistered = localStorage.getItem('hospitalRegistered');
+    if (isRegistered) {
+      setShowRegistration(true);
+    }
+  }, []);
+
+  const handleRegistrationClose = () => {
+    setShowRegistration(false);
+    localStorage.setItem('hospitalRegistered', true); // Mark as registered
   };
 
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-200 to-purple-200 relative">
+      {showRegistration && <HospitalRegistration onClose={handleRegistrationClose} />}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -42,33 +72,25 @@ export default function Login() {
         </div>
 
         <div className="flex mb-6">
-          <motion.button
-            variants={tabVariants}
-            animate={activeTab === 'staff' ? 'active' : 'inactive'}
+          <button
             onClick={() => setActiveTab('staff')}
-            className="flex-1 py-2 rounded-l-md transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`flex-1 py-2 rounded-l-md transition-colors duration-300 ${
+              activeTab === 'staff' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
+            }`}
           >
             Staff
-          </motion.button>
-          <motion.button
-            variants={tabVariants}
-            animate={activeTab === 'admin' ? 'active' : 'inactive'}
+          </button>
+          <button
             onClick={() => setActiveTab('admin')}
-            className="flex-1 py-2 rounded-r-md transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`flex-1 py-2 rounded-r-md transition-colors duration-300 ${
+              activeTab === 'admin' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
+            }`}
           >
             Admin
-          </motion.button>
+          </button>
         </div>
 
-        <motion.form
-          key={activeTab}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.3 }}
-          onSubmit={handleLogin}
-          className="space-y-6"
-        >
+        <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
               {activeTab === 'staff' ? 'Staff ID' : 'Admin Username'}
@@ -103,16 +125,15 @@ export default function Login() {
               />
             </div>
           </div>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-300"
           >
             Login as {activeTab === 'staff' ? 'Staff' : 'Admin'}
-          </motion.button>
-        </motion.form>
+          </button>
+        </form>
       </motion.div>
+
     </div>
   );
 }
