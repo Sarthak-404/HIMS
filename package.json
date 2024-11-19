@@ -1,6 +1,7 @@
 {
   "name": "hospital-management-system",
   "version": "0.1.0",
+  "main": "main.js",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
@@ -8,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/react": "^18.3.12",
     "axios": "^1.7.7",
+    "electron-is-dev": "^3.0.1",
     "formik": "^2.4.6",
     "framer-motion": "^11.11.9",
     "lucide-react": "^0.453.0",
@@ -23,8 +25,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "electron": "electron .",
+    "package": "electron-builder build"
   },
   "eslintConfig": {
     "extends": [
@@ -46,7 +48,33 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14"
+  },
+  "build": {
+    "appId": "com.hospitalmanagement.app",
+    "productName": "Hospital Management System",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "build/**/*",
+      "main.js",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "public/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "public/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "public/icon.png"
+    }
   }
 }
