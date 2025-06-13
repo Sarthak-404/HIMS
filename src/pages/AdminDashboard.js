@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { User, UserPlus, Users, Clock, Calendar, CheckCircle, XCircle, Clipboard } from 'lucide-react'
+import Navbar from '../components/Navbar.js' 
 
 export default function AdminDashboard() {
   const [doctorName, setDoctorName] = useState('')
@@ -117,10 +118,18 @@ export default function AdminDashboard() {
     }
   };
 
+
+
+  
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <>
+    
+    <div className="min-h-screen bg-gray-100  flex">
+      <Navbar /> 
+       <div className="fflex-1 p-8 overflow-y-auto">
       <h1 className="text-4xl font-bold text-gray-800 mb-8">Admin Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -376,127 +385,8 @@ export default function AdminDashboard() {
         </div>
       </motion.div>
     </div>
+    </div>
+    </>
   )
 }
 
-// "use client"
-// import React, { useState, useEffect } from 'react'
-// import { motion } from 'framer-motion'
-// import { User, UserPlus, Users, Clock, Calendar, CheckCircle, XCircle } from 'lucide-react'
-
-// export default function AdminDashboard() {
-//   const [doctorName, setDoctorName] = useState('');
-//   const [department, setDepartment] = useState('');
-//   const [timing, setTiming] = useState('');
-//   const [availability, setAvailability] = useState('');
-//   const [schedule, setSchedule] = useState('');
-//   const [doctorsList, setDoctorsList] = useState([]);
-  
-//   const [staffName, setStaffName] = useState('');
-//   const [username, setUsername] = useState('');
-//   const [password, setPassword] = useState('');
-//   const [staffList, setStaffList] = useState([]);
-
-//   useEffect(() => {
-//     fetchDoctors();
-//     fetchStaff();
-//   }, []);
-
-//   const fetchDoctors = async () => {
-//     try {
-//       const response = await fetch('http://localhost:5000/api/doctors');
-//       const data = await response.json();
-//       setDoctorsList(data);
-//     } catch (error) {
-//       console.error("Error fetching doctors:", error);
-//     }
-//   };
-
-//   const fetchStaff = async () => {
-//     try {
-//       const response = await fetch('http://localhost:5000/api/staff');
-//       const data = await response.json();
-//       setStaffList(data);
-//     } catch (error) {
-//       console.error("Error fetching staff:", error);
-//     }
-//   };
-
-//   const handleDoctorSubmit = async (e) => {
-//     e.preventDefault();
-//     const newDoctor = { name: doctorName, department, timing, availability, schedule };
-    
-//     try {
-//       const response = await fetch('http://localhost:5000/api/doctors', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify(newDoctor)
-//       });
-//       const addedDoctor = await response.json();
-//       setDoctorsList([...doctorsList, addedDoctor]);
-//       setDoctorName(''); setDepartment(''); setTiming(''); setAvailability(''); setSchedule('');
-//     } catch (error) {
-//       console.error("Error adding doctor:", error);
-//     }
-//   };
-
-//   const handleStaffSubmit = async (e) => {
-//     e.preventDefault();
-//     const newStaff = { name: staffName, username, password };
-    
-//     try {
-//       const response = await fetch('http://localhost:5000/api/staff', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify(newStaff)
-//       });
-//       const addedStaff = await response.json();
-//       setStaffList([...staffList, addedStaff]);
-//       setStaffName(''); setUsername(''); setPassword('');
-//     } catch (error) {
-//       console.error("Error adding staff:", error);
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-gray-100 p-8">
-//       <h1 className="text-4xl font-bold text-gray-800 mb-8">Admin Dashboard</h1>
-//       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-//         <motion.div className="bg-white rounded-lg shadow-md p-6">
-//           <h2 className="text-2xl font-semibold text-gray-800 mb-6">Add Doctor</h2>
-//           <form onSubmit={handleDoctorSubmit} className="space-y-4">
-//             {/* Form inputs for adding doctor */}
-//             <button type="submit" className="w-full flex justify-center py-2 px-4 bg-indigo-600 hover:bg-indigo-700">
-//               Add Doctor
-//             </button>
-//           </form>
-//         </motion.div>
-
-//         <motion.div className="bg-white rounded-lg shadow-md p-6">
-//           <h2 className="text-2xl font-semibold text-gray-800 mb-6">Add Staff Member</h2>
-//           <form onSubmit={handleStaffSubmit} className="space-y-4">
-//             {/* Form inputs for adding staff */}
-//             <button type="submit" className="w-full flex justify-center py-2 px-4 bg-green-600 hover:bg-green-700">
-//               Add Staff Member
-//             </button>
-//           </form>
-//         </motion.div>
-//       </div>
-
-//       {/* Display lists */}
-//       <div className="mt-12">
-//         <h3 className="text-xl font-semibold mb-4">Doctors List</h3>
-//         <ul>{doctorsList.map((doctor, index) => (
-//           <li key={index}><User /> {doctor.name} - {doctor.department}</li>
-//         ))}</ul>
-//       </div>
-      
-//       <div className="mt-12">
-//         <h3 className="text-xl font-semibold mb-4">Staff List</h3>
-//         <ul>{staffList.map((staff, index) => (
-//           <li key={index}><UserPlus /> {staff.name} - Username: {staff.username}</li>
-//         ))}</ul>
-//       </div>
-//     </div>
-//   );
-// }
